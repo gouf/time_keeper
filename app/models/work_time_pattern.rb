@@ -1,0 +1,2 @@
+class WorkTimePattern < ApplicationRecord
+end
