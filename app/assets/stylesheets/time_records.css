@@ -1,0 +1,17 @@
+.fill-time-at-now {
+  display: inline;
+  margin: 0px;
+  width: 5.7em;
+  margin-left: -5.7em;
+  margin-bottom: -5.0em;
+  border-top-left-radius: 0px;
+  border-top-right-radius: 0px;
+}
+
+.work-patterns {
+  height: 3.1em;
+}
+
+.time-record-submit {
+  margin-top: 1.5em;
+}
