@@ -38,10 +38,10 @@ preload_app!
 # option you will want to use this block to reconnect to any threads
 # or connections that may have been created at application boot, Ruby
 # cannot share connections between processes.
-#
-# on_worker_boot do
-#   ActiveRecord::Base.establish_connection if defined?(ActiveRecord)
-# end
+
+on_worker_boot do
+  ActiveRecord::Base.establish_connection if defined?(ActiveRecord)
+end
 
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
