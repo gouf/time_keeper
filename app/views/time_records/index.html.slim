@@ -3,20 +3,22 @@ h1 Listing time_records
 = form_for(@time_record, html: {class: 'form-inline'}) do |f|
   .form-group
     = f.label :number_field, '勤務パターン'
-    = f.number_field :work_time_pattern_id
+    = f.number_field :work_time_pattern_id, class: 'work-patterns'
   .form-group
     = f.label :rest_time, '休憩時間'
     = f.time_field :rest_time
   .form-group
     = f.label :work_start_at, '出勤時間'
     = f.time_field :work_start_at
+    input.btn.btn-default.fill-time-at-now type='button' value='現在時刻'
   .form-group
     = f.label :work_end_at, '退勤時間'
     = f.time_field :work_end_at
+    input.btn.btn-default.fill-time-at-now type='button' value='現在時刻'
   .form-group
     = f.label :description, '備考'
     = f.time_field :description
-  button.btn.btn-primary type='submit' submit
+  button.btn.btn-primary.time-record-submit type='submit' submit
 
 table
   thead
