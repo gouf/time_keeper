@@ -1,38 +1,53 @@
 h1 Listing time_records
 
-= form_for(@time_record, html: {class: 'form-inline'}) do |f|
-  .form-group
-    = f.label :number_field, '勤務パターン'
-    = f.number_field :work_time_pattern_id, class: 'work-patterns'
-  .form-group
-    = f.label :rest_time, '休憩時間'
-    = f.time_field :rest_time
-  .form-group
-    = f.label :work_start_at, '出勤時間'
-    = f.time_field :work_start_at
-    input.btn.btn-default.fill-time-at-now type='button' value='現在時刻'
-  .form-group
-    = f.label :work_end_at, '退勤時間'
-    = f.time_field :work_end_at
-    input.btn.btn-default.fill-time-at-now type='button' value='現在時刻'
-  .form-group
-    = f.label :description, '備考'
-    = f.time_field :description
-  button.btn.btn-primary.time-record-submit type='submit' submit
+.container
+  = form_for(@time_record, html: {class: 'form-inline'}) do |f|
+    = f.hidden_field :work_date, value: Date.today
+    .form-group
+      = f.label :number_field, '勤務パターン'
+      = f.number_field :work_time_pattern_id, class: 'work-patterns'
+    .form-group
+      = f.label :rest_time, '休憩時間'
+      = f.time_field :rest_time
+    .form-group
+      = f.label :work_start_at, '出勤時間'
+      = f.time_field :work_start_at
+      input.btn.btn-default.fill-time-at-now type='button' value='現在時刻'
+    .form-group
+      = f.label :work_end_at, '退勤時間'
+      = f.time_field :work_end_at
+      input.btn.btn-default.fill-time-at-now type='button' value='現在時刻'
+    .form-group
+      = f.label :description, '備考'
+      = f.text_field :description, class: 'work-patterns'
+    button.btn.btn-primary.time-record-submit type='submit' submit
 
-table
-  thead
-    tr
-      th
-      th
-      th
-
-  tbody
-    - @time_records.each do |time_record|
+br
+br
+.container
+  table.table.table-striped
+    thead
       tr
-        td = link_to 'Show', time_record
-        td = link_to 'Edit', edit_time_record_path(time_record)
-        td = link_to 'Destroy', time_record, data: { confirm: 'Are you sure?' }, method: :delete
+        th 日付
+        th 勤務パターン
+        th 休憩時間
+        th 出勤時間
+        th 退勤時間
+        th 備考
+        th 操作
+
+    tbody
+      - @time_records.each do |time_record|
+        tr
+          td = l time_record.work_date, format: '%m月%d日(%a)'
+          td = time_record.work_time_pattern_id
+          td = time_record.rest_time.strftime('%H:%M')
+          td = time_record.work_start_at.strftime('%H:%M')
+          td = time_record.work_end_at.strftime('%H:%M')
+          td = time_record.description
+          td colspan="3" = link_to '表示', time_record
+          td = link_to '編集', edit_time_record_path(time_record)
+          td = link_to '削除', time_record, data: { confirm: '本当に削除しますか?' }, method: :delete
 
 br
 
