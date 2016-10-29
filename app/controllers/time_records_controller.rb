@@ -70,6 +70,13 @@ class TimeRecordsController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def time_record_params
-      params.fetch(:time_record, {})
+      params.require(:time_record).permit(
+        :work_date,
+        :worktime_pattern_id,
+        :rest_time,
+        :work_start_at,
+        :work_end_at,
+        :description
+      )
     end
 end

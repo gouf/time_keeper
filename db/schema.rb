@@ -10,7 +10,7 @@
 #
 # It's strongly recommended that you check this file into your version control system.
 
-ActiveRecord::Schema.define(version: 20161013131144) do
+ActiveRecord::Schema.define(version: 20161029131415) do
 
   create_table "time_records", force: :cascade do |t|
     t.datetime "created_at",                                           null: false
@@ -20,6 +20,7 @@ ActiveRecord::Schema.define(version: 20161013131144) do
     t.time     "work_start_at"
     t.time     "work_end_at"
     t.text     "description",          default: ""
+    t.date     "work_date"
   end
 
   create_table "work_time_patterns", force: :cascade do |t|
@@ -27,7 +28,6 @@ ActiveRecord::Schema.define(version: 20161013131144) do
     t.time     "work_end_at"
     t.datetime "created_at",    null: false
     t.datetime "updated_at",    null: false
-    t.string   "name"
   end
 
 end
