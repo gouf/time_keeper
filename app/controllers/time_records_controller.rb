@@ -63,20 +63,21 @@ class TimeRecordsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_time_record
-      @time_record = TimeRecord.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def time_record_params
-      params.require(:time_record).permit(
-        :work_date,
-        :worktime_pattern_id,
-        :rest_time,
-        :work_start_at,
-        :work_end_at,
-        :description
-      )
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_time_record
+    @time_record = TimeRecord.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def time_record_params
+    params.require(:time_record).permit(
+      :work_date,
+      :worktime_pattern_id,
+      :rest_time,
+      :work_start_at,
+      :work_end_at,
+      :description
+    )
+  end
 end
