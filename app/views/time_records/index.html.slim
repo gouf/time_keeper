@@ -41,9 +41,9 @@ br
         tr
           td = l time_record.work_date, format: '%m月%d日(%a)'
           td = time_record.work_time_pattern_id
-          td = time_record.rest_time.strftime('%H:%M')
-          td = time_record.work_start_at.strftime('%H:%M')
-          td = time_record.work_end_at.strftime('%H:%M')
+          td = time_record.rest_time&.strftime('%H:%M')
+          td = time_record.work_start_at&.strftime('%H:%M')
+          td = time_record.work_end_at&.strftime('%H:%M')
           td = time_record.description
           td colspan="3" = link_to '表示', time_record
           td = link_to '編集', edit_time_record_path(time_record)
