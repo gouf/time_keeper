@@ -45,7 +45,10 @@ class TimeRecordsController < ApplicationController
   # POST /time_records
   # POST /time_records.json
   def create
-    @time_record = TimeRecord.new(time_record_params)
+    # TODO : create だけどupdate なことをしているので、ビュー側の入力フォームのsubmit をupdate に向くように変更する
+    @time_record = TimeRecord.find_by_work_date(time_record_params[:work_date])
+    @time_record ||= TimeRecord.new(time_record_params)
+    @time_record.attributes = time_record_params
 
     respond_to do |format|
       if @time_record.save
