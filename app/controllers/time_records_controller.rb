@@ -73,7 +73,7 @@ class TimeRecordsController < ApplicationController
   def time_record_params
     params.require(:time_record).permit(
       :work_date,
-      :worktime_pattern_id,
+      :work_time_pattern_id,
       :rest_time,
       :work_start_at,
       :work_end_at,
