@@ -1,6 +1,6 @@
-h1 勤怠表
 
 .container
+  h1 勤怠表
   = form_for(@time_record, html: {class: 'form-inline'}) do |f|
     = f.hidden_field :work_date, value: Date.today
     .form-group
