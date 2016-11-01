@@ -14,9 +14,7 @@ $( ->
     now_string = ''.concat(
       stretchTimeFormat(now.getHours()),
       ':',
-      stretchTimeFormat(now.getMinutes()),
-      ':',
-      stretchTimeFormat(now.getSeconds())
+      stretchTimeFormat(now.getMinutes())
     )
 
     input = $(@).parent().children('input[type="time"]').get(0)
