@@ -4,7 +4,7 @@ class TimeRecordsController < ApplicationController
   # GET /time_records
   # GET /time_records.json
   def index
-    @time_record = TimeRecord.new
+    @time_record = TimeRecord.find_by_work_date(params[:work_date] || Date.today)
     # 当月の日付分、TimeRecord オブジェクトを用意する
     # * 当月の日が何日あるかを調べる
     # * 全レコードから当該日付にマッピングする
@@ -45,10 +45,7 @@ class TimeRecordsController < ApplicationController
   # POST /time_records
   # POST /time_records.json
   def create
-    # TODO : create だけどupdate なことをしているので、ビュー側の入力フォームのsubmit をupdate に向くように変更する
-    @time_record = TimeRecord.find_by_work_date(time_record_params[:work_date])
-    @time_record ||= TimeRecord.new(time_record_params)
-    @time_record.attributes = time_record_params
+    @time_record = TimeRecord.new(time_record_params)
 
     respond_to do |format|
       if @time_record.save
