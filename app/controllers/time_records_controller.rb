@@ -5,7 +5,27 @@ class TimeRecordsController < ApplicationController
   # GET /time_records.json
   def index
     @time_record = TimeRecord.new
-    @time_records = TimeRecord.all
+    # 当月の日付分、TimeRecord オブジェクトを用意する
+    # * 当月の日が何日あるかを調べる
+    # * 全レコードから当該日付にマッピングする
+    # @time_records に代入する
+    map_time_records_to_calender =
+      proc do
+        # 当月の日付分、TimeRecord オブジェクトを用意する
+        # * 当月の日が何日あるかを調べる
+        today = Date.today
+        month = today.month
+        year = today.year
+        days_in_month = Time.days_in_month(month, year)
+
+        # カレンダーの日付にマッピングしていく
+        1.step(days_in_month).map do |day|
+          date = Date.new(year, month, day)
+          TimeRecord.find_or_create_by(work_date: date)
+        end
+      end
+
+    @time_records = map_time_records_to_calender.call
   end
 
   # GET /time_records/1
