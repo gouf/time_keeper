@@ -1,6 +1,6 @@
-h1 Listing time_records
 
 .container
+  h1 勤怠表
   = form_for(@time_record, html: {class: 'form-inline'}) do |f|
     = f.hidden_field :work_date, value: Date.today
     .form-group
@@ -25,6 +25,7 @@ h1 Listing time_records
 br
 br
 .container
+  h2.text-center = year_month_display
   table.table.table-striped
     thead
       tr
@@ -39,11 +40,11 @@ br
     tbody
       - @time_records.each do |time_record|
         tr
-          td = l time_record.work_date, format: '%m月%d日(%a)'
+          td = l time_record.work_date, format: '%d日(%a)'
           td = time_record.work_time_pattern_id
-          td = time_record.rest_time.strftime('%H:%M')
-          td = time_record.work_start_at.strftime('%H:%M')
-          td = time_record.work_end_at.strftime('%H:%M')
+          td = time_record.rest_time&.strftime('%H:%M')
+          td = time_record.work_start_at&.strftime('%H:%M')
+          td = time_record.work_end_at&.strftime('%H:%M')
           td = time_record.description
           td colspan="3" = link_to '表示', time_record
           td = link_to '編集', edit_time_record_path(time_record)

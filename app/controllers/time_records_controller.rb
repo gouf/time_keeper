@@ -4,8 +4,35 @@ class TimeRecordsController < ApplicationController
   # GET /time_records
   # GET /time_records.json
   def index
-    @time_record = TimeRecord.new
-    @time_records = TimeRecord.all
+    @time_record = TimeRecord.find_by_work_date(params[:work_date] || Date.today)
+    # 当月の日付分、TimeRecord オブジェクトを用意する
+    # * 当月の日が何日あるかを調べる
+    # * 全レコードから当該日付にマッピングする
+    # @time_records に代入する
+    map_time_records_to_calender =
+      proc do |month, year|
+        # 当月の日付分、TimeRecord オブジェクトを用意する
+        # * 当月の日が何日あるかを調べる
+        days_in_month = Time.days_in_month(month, year)
+
+        # カレンダーの日付にマッピングしていく
+        1.step(days_in_month).map do |day|
+          date = Date.new(year, month, day)
+          TimeRecord.find_or_create_by(work_date: date)
+        end
+      end
+
+    # params[:year], params[:month] 情報から年月の表示を移動する
+    @year, @month =
+      [
+        params[:year].nil? ? Date.today.year : params[:year].to_i,
+        params[:month].nil? ? Date.today.month : params[:month].to_i
+      ]
+    # 月がその範囲を踏み切ったときに年を移動する
+    @month, @year = [12, @year - 1] if @month < 1
+    @month, @year = [1, @year + 1] if @month > 12
+
+    @time_records = map_time_records_to_calender.call(@month, @year)
   end
 
   # GET /time_records/1
