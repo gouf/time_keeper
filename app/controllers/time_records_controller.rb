@@ -10,12 +10,9 @@ class TimeRecordsController < ApplicationController
     # * 全レコードから当該日付にマッピングする
     # @time_records に代入する
     map_time_records_to_calender =
-      proc do
+      proc do |month, year|
         # 当月の日付分、TimeRecord オブジェクトを用意する
         # * 当月の日が何日あるかを調べる
-        today = Date.today
-        month = today.month
-        year = today.year
         days_in_month = Time.days_in_month(month, year)
 
         # カレンダーの日付にマッピングしていく
@@ -25,7 +22,17 @@ class TimeRecordsController < ApplicationController
         end
       end
 
-    @time_records = map_time_records_to_calender.call
+    # params[:year], params[:month] 情報から年月の表示を移動する
+    @year, @month =
+      [
+        params[:year].nil? ? Date.today.year : params[:year].to_i,
+        params[:month].nil? ? Date.today.month : params[:month].to_i
+      ]
+    # 月がその範囲を踏み切ったときに年を移動する
+    @month, @year = [12, @year - 1] if @month < 1
+    @month, @year = [1, @year + 1] if @month > 12
+
+    @time_records = map_time_records_to_calender.call(@month, @year)
   end
 
   # GET /time_records/1
