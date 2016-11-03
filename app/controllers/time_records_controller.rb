@@ -104,6 +104,7 @@ class TimeRecordsController < ApplicationController
     @month, @year = [1, @year + 1] if @month > 12
 
     # 値をセッションに保存して再利用する
+    # レコード 編集後のページ遷移に対応する
     session[:year] = @year
     session[:month] = @month
   end
@@ -118,6 +119,7 @@ class TimeRecordsController < ApplicationController
     # * 当月の日が何日あるかを調べる
     days_in_month = Time.days_in_month(month, year)
 
+    # 1日目から月末まで
     # カレンダーの日付にマッピングしていく
     1.step(days_in_month).map do |day|
       date = Date.new(year, month, day)
