@@ -6,7 +6,8 @@ class TimeRecordsController < ApplicationController
   # GET /time_records.json
   def index
     @time_record = TimeRecord.find_by_work_date(params[:work_date] || Date.today)
-    @time_records = map_time_records_to_calender.call(@month, @year)
+    @time_records = map_time_records_to_calender(month: @month, year: @year)
+    @work_time = calculate_work_time(@time_records)
   end
 
   # GET /time_records/1
@@ -121,6 +122,35 @@ class TimeRecordsController < ApplicationController
     1.step(days_in_month).map do |day|
       date = Date.new(year, month, day)
       TimeRecord.find_or_create_by(work_date: date)
+    end
+  end
+
+  def calculate_work_time(time_records)
+    time_records.map do |time_record|
+      rest_time = time_record.rest_time.hour.to_i * 1.hour
+
+      work_time =
+        if [time_record&.work_end_at, time_record&.work_start_at].compact.size.eql?(2) # 両方に値がある場合
+          Time.at((time_record.work_end_at.to_i - time_record.work_start_at.to_i - rest_time).abs).utc
+        else
+          Time.at(0).utc
+        end
+
+      # 8 時間を超えたものを残業時間として計上
+      residual_time =
+        if (work_time.to_i - 8.hour.to_i) > 0
+          # residual_time を計算後にwork_time を更新しないと8時間差し引きの計算が合わない
+          _residual_time = Time.at(work_time.to_i - 8.hour.to_i).utc
+          work_time = Time.at(8.hour.to_i).utc
+          _residual_time
+        else
+          Time.at(0).utc
+        end
+
+      {
+        residual_time: residual_time,
+        work_time: { work_time: work_time, hour: work_time.hour, min: work_time.min }
+      }
     end
   end
 end
