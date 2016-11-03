@@ -1,38 +1,13 @@
 class TimeRecordsController < ApplicationController
   before_action :set_time_record, only: [:show, :edit, :update, :destroy]
+  before_action :set_year_month_instance_variable, only: [:index]
 
   # GET /time_records
   # GET /time_records.json
   def index
     @time_record = TimeRecord.find_by_work_date(params[:work_date] || Date.today)
-    # 当月の日付分、TimeRecord オブジェクトを用意する
-    # * 当月の日が何日あるかを調べる
-    # * 全レコードから当該日付にマッピングする
-    # @time_records に代入する
-    map_time_records_to_calender =
-      proc do |month, year|
-        # 当月の日付分、TimeRecord オブジェクトを用意する
-        # * 当月の日が何日あるかを調べる
-        days_in_month = Time.days_in_month(month, year)
-
-        # カレンダーの日付にマッピングしていく
-        1.step(days_in_month).map do |day|
-          date = Date.new(year, month, day)
-          TimeRecord.find_or_create_by(work_date: date)
-        end
-      end
-
-    # params[:year], params[:month] 情報から年月の表示を移動する
-    @year, @month =
-      [
-        params[:year].nil? ? Date.today.year : params[:year].to_i,
-        params[:month].nil? ? Date.today.month : params[:month].to_i
-      ]
-    # 月がその範囲を踏み切ったときに年を移動する
-    @month, @year = [12, @year - 1] if @month < 1
-    @month, @year = [1, @year + 1] if @month > 12
-
-    @time_records = map_time_records_to_calender.call(@month, @year)
+    @time_records = map_time_records_to_calender(month: @month, year: @year)
+    @work_time = calculate_work_time(@time_records)
   end
 
   # GET /time_records/1
@@ -70,7 +45,7 @@ class TimeRecordsController < ApplicationController
   def update
     respond_to do |format|
       if @time_record.update(time_record_params)
-        format.html { redirect_to @time_record, notice: 'Time record was successfully updated.' }
+        format.html { redirect_to time_records_path, notice: 'Time record was successfully updated.' }
         format.json { render :show, status: :ok, location: @time_record }
       else
         format.html { render :edit }
@@ -106,5 +81,76 @@ class TimeRecordsController < ApplicationController
       :work_end_at,
       :description
     )
+  end
+
+  def set_year_month_instance_variable
+    # params[:year], params[:month] 情報から年月の表示を移動する
+    # 次点 session[:year], session[:month] から取り出し
+    # なければ現在の年・月から値を設定
+    @year, @month =
+      [
+        params[:year].nil? ? nil : params[:year].to_i,
+        params[:month].nil? ? nil : params[:month].to_i
+      ]
+
+    @year ||= session[:year]
+    @month ||= session[:month]
+
+    @year ||= Date.today.year
+    @month ||= Date.today.month
+
+    # 月がその範囲を踏み切ったときに年を移動する
+    @month, @year = [12, @year - 1] if @month < 1
+    @month, @year = [1, @year + 1] if @month > 12
+
+    # 値をセッションに保存して再利用する
+    session[:year] = @year
+    session[:month] = @month
+  end
+
+  def map_time_records_to_calender(month:, year:)
+    # 当月の日付分、TimeRecord オブジェクトを用意する
+    # * 当月の日が何日あるかを調べる
+    # * 全レコードから当該日付にマッピングする
+    # @time_records に代入する
+
+    # 当月の日付分、TimeRecord オブジェクトを用意する
+    # * 当月の日が何日あるかを調べる
+    days_in_month = Time.days_in_month(month, year)
+
+    # カレンダーの日付にマッピングしていく
+    1.step(days_in_month).map do |day|
+      date = Date.new(year, month, day)
+      TimeRecord.find_or_create_by(work_date: date)
+    end
+  end
+
+  def calculate_work_time(time_records)
+    time_records.map do |time_record|
+      rest_time = time_record.rest_time.hour.to_i * 1.hour
+
+      work_time =
+        if [time_record&.work_end_at, time_record&.work_start_at].compact.size.eql?(2) # 両方に値がある場合
+          Time.at((time_record.work_end_at.to_i - time_record.work_start_at.to_i - rest_time).abs).utc
+        else
+          Time.at(0).utc
+        end
+
+      # 8 時間を超えたものを残業時間として計上
+      residual_time =
+        if (work_time.to_i - 8.hour.to_i) > 0
+          # residual_time を計算後にwork_time を更新しないと8時間差し引きの計算が合わない
+          _residual_time = Time.at(work_time.to_i - 8.hour.to_i).utc
+          work_time = Time.at(8.hour.to_i).utc
+          _residual_time
+        else
+          Time.at(0).utc
+        end
+
+      {
+        residual_time: residual_time,
+        work_time: { work_time: work_time, hour: work_time.hour, min: work_time.min }
+      }
+    end
   end
 end
