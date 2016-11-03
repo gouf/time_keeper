@@ -1,9 +1,31 @@
-= form_for @time_record do |f|
-  - if @time_record.errors.any?
-    #error_explanation
-      h2 = "#{pluralize(@time_record.errors.count, "error")} prohibited this time_record from being saved:"
-      ul
-        - @time_record.errors.full_messages.each do |message|
-          li = message
+.container
+  = form_for(@time_record, html: {class: 'form-inline'})do |f|
+    - if @time_record.errors.any?
+      #error_explanation
+        h2 = "#{pluralize(@time_record.errors.count, "error")} prohibited this time_record from being saved:"
+        ul
+          - @time_record.errors.full_messages.each do |message|
+            li = message
+    .form-group
+      = f.label :work_date, '勤務日付'
+      = content_tag(:input, '', value: l(@time_record.work_date, format: '%Y年%m月%d日(%a)'), class: 'work-patterns disabled', disabled: true)
+    .form-group
+      = f.label :number_field, '勤務パターン'
+      = f.number_field :work_time_pattern_id, class: 'work-patterns'
+    .form-group
+      = f.label :rest_time, '休憩時間'
+      = f.time_field :rest_time
+    .form-group
+      = f.label :work_start_at, '出勤時間'
+      = f.time_field :work_start_at
+      input.btn.btn-default.fill-time-at-now type='button' value='現在時刻'
+    .form-group
+      = f.label :work_end_at, '退勤時間'
+      = f.time_field :work_end_at
+      input.btn.btn-default.fill-time-at-now type='button' value='現在時刻'
+    .form-group
+      = f.label :description, '備考'
+      = f.text_field :description, class: 'work-patterns'
+    button.btn.btn-primary.time-record-submit type='submit' submit
 
-  .actions = f.submit
+    .actions = f.submit
