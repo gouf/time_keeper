@@ -119,6 +119,12 @@ class TimeRecordsController < ApplicationController
     # * 当月の日が何日あるかを調べる
     days_in_month = Time.days_in_month(month, year)
 
+    # すでに指定年月のレコードが作成されていれば
+    # SQL クエリから結果を返す
+    query_result = TimeRecord.find_by_work_date_in_month_year(month, year).order(:work_date)
+    result_size = query_result.count('*')
+    return query_result if result_size.eql?(days_in_month)
+
     # 1日目から月末まで
     # カレンダーの日付にマッピングしていく
     1.step(days_in_month).map do |day|
