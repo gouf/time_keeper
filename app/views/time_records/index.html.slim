@@ -34,21 +34,34 @@ br
         th 休憩時間
         th 出勤時間
         th 退勤時間
+        th 稼働時間
+        th 通常残業
         th 備考
         th 操作
 
     tbody
-      - @time_records.each do |time_record|
+      - @time_records.each_with_index do |time_record, i|
         tr
           td = l time_record.work_date, format: '%d日(%a)'
           td = time_record.work_time_pattern_id
           td = time_record.rest_time&.strftime('%H:%M')
           td = time_record.work_start_at&.strftime('%H:%M')
           td = time_record.work_end_at&.strftime('%H:%M')
+          td = @work_time[i][:work_time][:work_time].strftime('%H:%M')
+          td = @work_time[i][:residual_time].strftime('%H:%M')
           td = time_record.description
           td colspan="3" = link_to '表示', time_record
           td = link_to '編集', edit_time_record_path(time_record)
           td = link_to '削除', time_record, data: { confirm: '本当に削除しますか?' }, method: :delete
+      tr
+        td &nbsp;
+        td.text-center colspan="2" = "満勤 #{@time_records.find_all{ |r| (0..4).include?(r.work_date.wday) }.size}"
+        td &nbsp;
+        td &nbsp;
+        td = worked_time(@work_time)
+        td &nbsp;
+        td &nbsp;
+        td colspan="3" &nbsp;
 
 br
 
