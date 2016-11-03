@@ -6,23 +6,6 @@ class TimeRecordsController < ApplicationController
   # GET /time_records.json
   def index
     @time_record = TimeRecord.find_by_work_date(params[:work_date] || Date.today)
-    # 当月の日付分、TimeRecord オブジェクトを用意する
-    # * 当月の日が何日あるかを調べる
-    # * 全レコードから当該日付にマッピングする
-    # @time_records に代入する
-    map_time_records_to_calender =
-      proc do |month, year|
-        # 当月の日付分、TimeRecord オブジェクトを用意する
-        # * 当月の日が何日あるかを調べる
-        days_in_month = Time.days_in_month(month, year)
-
-        # カレンダーの日付にマッピングしていく
-        1.step(days_in_month).map do |day|
-          date = Date.new(year, month, day)
-          TimeRecord.find_or_create_by(work_date: date)
-        end
-      end
-
     @time_records = map_time_records_to_calender.call(@month, @year)
   end
 
@@ -122,5 +105,22 @@ class TimeRecordsController < ApplicationController
     # 値をセッションに保存して再利用する
     session[:year] = @year
     session[:month] = @month
+  end
+
+  def map_time_records_to_calender(month:, year:)
+    # 当月の日付分、TimeRecord オブジェクトを用意する
+    # * 当月の日が何日あるかを調べる
+    # * 全レコードから当該日付にマッピングする
+    # @time_records に代入する
+
+    # 当月の日付分、TimeRecord オブジェクトを用意する
+    # * 当月の日が何日あるかを調べる
+    days_in_month = Time.days_in_month(month, year)
+
+    # カレンダーの日付にマッピングしていく
+    1.step(days_in_month).map do |day|
+      date = Date.new(year, month, day)
+      TimeRecord.find_or_create_by(work_date: date)
+    end
   end
 end
