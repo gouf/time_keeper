@@ -45,7 +45,7 @@ class TimeRecordsController < ApplicationController
   def update
     respond_to do |format|
       if @time_record.update(time_record_params)
-        format.html { redirect_to @time_record, notice: 'Time record was successfully updated.' }
+        format.html { redirect_to time_records_path, notice: 'Time record was successfully updated.' }
         format.json { render :show, status: :ok, location: @time_record }
       else
         format.html { render :edit }
