@@ -29,4 +29,15 @@ module TimeRecordsHelper
       class: 'text-center'
     )
   end
+
+  def worked_time(work_time)
+    hour = work_time.map { |x| x.dig(:work_time, :hour).to_i }.inject(:+)
+    min = work_time.map { |x| x.dig(:work_time, :min).to_i }.inject(:+)
+
+    # 分が持ちすぎている値を時に繰り上げ
+    add_to_hour, min = min.divmod(60)
+    hour += add_to_hour
+
+    "#{hour}:#{min}"
+  end
 end
