@@ -1,1 +1,0 @@
-json.array! @work_patterns, partial: 'work_patterns/work_pattern', as: :work_pattern

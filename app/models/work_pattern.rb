@@ -1,2 +1,0 @@
-class WorkPattern < ApplicationRecord
-end

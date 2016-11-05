@@ -1,0 +1,25 @@
+h1 Listing work_time_patterns
+
+table
+  thead
+    tr
+      th Name
+      th Work started at
+      th Work ended at
+      th
+      th
+      th
+
+  tbody
+    - @work_time_patterns.each do |work_time_pattern|
+      tr
+        td = work_time_pattern.name
+        td = work_time_pattern.work_started_at
+        td = work_time_pattern.work_ended_at
+        td = link_to 'Show', work_time_pattern
+        td = link_to 'Edit', edit_work_time_pattern_path(work_time_pattern)
+        td = link_to 'Destroy', work_time_pattern, data: { confirm: 'Are you sure?' }, method: :delete
+
+br
+
+= link_to 'New Work pattern', new_work_time_pattern_path
