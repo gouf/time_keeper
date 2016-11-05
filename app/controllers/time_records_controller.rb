@@ -5,8 +5,9 @@ class TimeRecordsController < ApplicationController
   # GET /time_records
   # GET /time_records.json
   def index
-    @time_record = TimeRecord.find_by_work_date(params[:work_date] || Date.today)
     @time_records = map_time_records_to_calender(month: @month, year: @year)
+    @time_record = TimeRecord.find_by_work_date(params[:work_date] || Date.today)
+
     @work_time = calculate_work_time(@time_records)
   end
 
