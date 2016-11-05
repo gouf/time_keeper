@@ -43,7 +43,7 @@ br
       - @time_records.each_with_index do |time_record, i|
         tr
           td = l time_record.work_date, format: '%d日(%a)'
-          td = time_record.work_time_pattern_id
+          td = time_record.work_time_pattern&.name
           td = time_record.rest_time&.strftime('%H:%M')
           td = time_record.work_start_at&.strftime('%H:%M')
           td = time_record.work_end_at&.strftime('%H:%M')
