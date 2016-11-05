@@ -40,4 +40,24 @@ module TimeRecordsHelper
 
     "#{hour}:#{min}"
   end
+
+  # TODO : 各ユーザがもつ勤務パターンを取得できるようにする(複数ユーザ対応)
+  def work_time_pattern_select
+    option_label =
+      proc do |record|
+        "#{record.name} :  #{record.work_started_at.strftime('%H:%M')} - #{record.work_ended_at.strftime('%H:%M')}"
+      end
+
+    content_tag(
+      :select,
+      raw(
+        WorkTimePattern.all.inject('') do |x, r|
+          x + content_tag(:option, option_label.call(r), value: r.id)
+        end
+      ),
+      name: 'time_record[work_time_pattern_id]',
+      id: 'time_record_work_time_pattern_id',
+      class: 'work-patterns'
+    )
+  end
 end
