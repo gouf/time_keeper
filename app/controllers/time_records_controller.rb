@@ -130,7 +130,15 @@ class TimeRecordsController < ApplicationController
     # カレンダーの日付にマッピングしていく
     1.step(days_in_month).map do |day|
       date = Date.new(year, month, day)
-      TimeRecord.find_or_create_by(work_date: date)
+      # model association の設定で外部ID 入力必須のため
+      # バリデーション回避オプションを有効化
+      if time_record = TimeRecord.find_by_work_date(date)
+        time_record
+      else
+        time_record = TimeRecord.new(work_date: date)
+        time_record.save(validate: false)
+        time_record
+      end
     end
   end
 
