@@ -1,0 +1,1 @@
+json.partial! "work_patterns/work_pattern", work_pattern: @work_pattern

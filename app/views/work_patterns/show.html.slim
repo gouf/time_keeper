@@ -1,0 +1,15 @@
+p#notice = notice
+
+p
+  strong Name:
+  = @work_pattern.name
+p
+  strong Work started at:
+  = @work_pattern.work_started_at
+p
+  strong Work ended at:
+  = @work_pattern.work_ended_at
+
+= link_to 'Edit', edit_work_pattern_path(@work_pattern)
+'|
+= link_to 'Back', work_patterns_path
