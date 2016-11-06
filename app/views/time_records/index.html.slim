@@ -5,7 +5,7 @@
     = f.hidden_field :work_date, value: Date.today
     .form-group
       = f.label :number_field, '勤務パターン'
-      = f.number_field :work_time_pattern_id, class: 'work-patterns'
+      = work_time_pattern_select
     .form-group
       = f.label :rest_time, '休憩時間'
       = f.time_field :rest_time
@@ -31,6 +31,8 @@ br
       tr
         th 日付
         th 勤務パターン
+        th 勤務開始時間
+        th 勤務終了時間
         th 休憩時間
         th 出勤時間
         th 退勤時間
@@ -43,7 +45,9 @@ br
       - @time_records.each_with_index do |time_record, i|
         tr
           td = l time_record.work_date, format: '%d日(%a)'
-          td = time_record.work_time_pattern_id
+          td = time_record.work_time_pattern&.name
+          td = time_record.work_time_pattern&.work_started_at.try { |x| x.strftime('%H:%M') }
+          td = time_record.work_time_pattern&.work_ended_at.try { |x| x.strftime('%H:%M') }
           td = time_record.rest_time&.strftime('%H:%M')
           td = time_record.work_start_at&.strftime('%H:%M')
           td = time_record.work_end_at&.strftime('%H:%M')
