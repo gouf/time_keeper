@@ -16,12 +16,12 @@
       = f.label :rest_time, '休憩時間'
       = f.time_field :rest_time
     .form-group
-      = f.label :work_start_at, '出勤時間'
-      = f.time_field :work_start_at
+      = f.label :work_started_at, '出勤時間'
+      = f.time_field :work_started_at
       input.btn.btn-default.fill-time-at-now type='button' value='現在時刻'
     .form-group
-      = f.label :work_end_at, '退勤時間'
-      = f.time_field :work_end_at
+      = f.label :work_ended_at, '退勤時間'
+      = f.time_field :work_ended_at
       input.btn.btn-default.fill-time-at-now type='button' value='現在時刻'
     .form-group
       = f.label :description, '備考'

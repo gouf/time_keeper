@@ -10,12 +10,12 @@
       = f.label :rest_time, '休憩時間'
       = f.time_field :rest_time
     .form-group
-      = f.label :work_start_at, '出勤時間'
-      = f.time_field :work_start_at
+      = f.label :work_started_at, '出勤時間'
+      = f.time_field :work_started_at
       input.btn.btn-default.fill-time-at-now type='button' value='現在時刻'
     .form-group
-      = f.label :work_end_at, '退勤時間'
-      = f.time_field :work_end_at
+      = f.label :work_ended_at, '退勤時間'
+      = f.time_field :work_ended_at
       input.btn.btn-default.fill-time-at-now type='button' value='現在時刻'
     .form-group
       = f.label :description, '備考'
@@ -49,8 +49,8 @@ br
           td = time_record.work_time_pattern&.work_started_at.try { |x| x.strftime('%H:%M') }
           td = time_record.work_time_pattern&.work_ended_at.try { |x| x.strftime('%H:%M') }
           td = time_record.rest_time&.strftime('%H:%M')
-          td = time_record.work_start_at&.strftime('%H:%M')
-          td = time_record.work_end_at&.strftime('%H:%M')
+          td = time_record.work_started_at&.strftime('%H:%M')
+          td = time_record.work_ended_at&.strftime('%H:%M')
           td = @work_time[i][:work_time][:work_time].strftime('%H:%M')
           td = @work_time[i][:residual_time].strftime('%H:%M')
           td = time_record.description

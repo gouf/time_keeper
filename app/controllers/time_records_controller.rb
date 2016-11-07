@@ -78,8 +78,8 @@ class TimeRecordsController < ApplicationController
       :work_date,
       :work_time_pattern_id,
       :rest_time,
-      :work_start_at,
-      :work_end_at,
+      :work_started_at,
+      :work_ended_at,
       :description
     )
   end
@@ -147,8 +147,8 @@ class TimeRecordsController < ApplicationController
       rest_time = time_record.rest_time.hour.to_i * 1.hour
 
       work_time =
-        if [time_record&.work_end_at, time_record&.work_start_at].compact.size.eql?(2) # 両方に値がある場合
-          Time.at((time_record.work_end_at.to_i - time_record.work_start_at.to_i - rest_time).abs).utc
+        if [time_record&.work_ended_at, time_record&.work_started_at].compact.size.eql?(2) # 両方に値がある場合
+          Time.at((time_record.work_ended_at.to_i - time_record.work_started_at.to_i - rest_time).abs).utc
         else
           Time.at(0).utc
         end
