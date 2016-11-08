@@ -50,13 +50,27 @@ table.table.table-striped
   tbody
     - @transportation_expenses.each do |transportation_expense|
       tr
-        td = transportation_expense.use_date / 利用日
-        td = transportation_expense.destination / 行き先(目的地)
-        td = transportation_expense.is_round_trip ? '往復' : '片道' / 往復
-        td = transportation_expense.route / 経路(移動手段)
-        td = transportation_expense.destination_from / 出発(駅・バス停)
-        td = transportation_expense.destination_to / 到着
-        td = transportation_expense.cost / 金額
+        / 利用日
+        td = transportation_expense.use_date
+
+        / 行き先(目的地)
+        td = transportation_expense.destination
+
+        / 往復
+        td = transportation_expense.is_round_trip ? '往復' : '片道'
+
+        / 経路(移動手段)
+        td = transportation_expense.route
+
+        / 出発(駅・バス停)
+        td = transportation_expense.destination_from
+
+        / 到着
+        td = transportation_expense.destination_to
+
+        / 金額
+        td = transportation_expense.cost
+
         td = link_to 'Show', transportation_expense
         td = link_to 'Edit', edit_transportation_expense_path(transportation_expense)
         td = link_to 'Destroy', transportation_expense, data: { confirm: 'Are you sure?' }, method: :delete
