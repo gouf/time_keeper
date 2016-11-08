@@ -70,6 +70,14 @@ class TransportationExpensesController < ApplicationController
 
     # Never trust parameters from the scary internet, only allow the white list through.
     def transportation_expense_params
-      params.require(:transportation_expense).permit(:destination, :route, :destination_from, :destination_to, :is_round_trip, :cost)
+      params.require(:transportation_expense).permit(
+        :use_date,
+        :destination,
+        :route,
+        :destination_from,
+        :destination_to,
+        :is_round_trip,
+        :cost
+      )
     end
 end
