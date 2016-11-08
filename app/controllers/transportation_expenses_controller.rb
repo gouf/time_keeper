@@ -4,6 +4,7 @@ class TransportationExpensesController < ApplicationController
   # GET /transportation_expenses
   # GET /transportation_expenses.json
   def index
+    @transportation_expense = TransportationExpense.new(use_date: Date.today)
     @transportation_expenses = TransportationExpense.all
   end
 
