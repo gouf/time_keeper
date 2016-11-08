@@ -1,4 +1,5 @@
 Rails.application.routes.draw do
+  resources :transportation_expenses
   resources :work_time_patterns
   resources :time_records
   root 'time_records#index'
