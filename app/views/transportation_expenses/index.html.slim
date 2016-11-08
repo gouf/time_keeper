@@ -1,0 +1,31 @@
+h1 Listing transportation_expenses
+
+table
+  thead
+    tr
+      th Destination
+      th Route
+      th Destination from
+      th Destination to
+      th Is round trip
+      th Cost
+      th
+      th
+      th
+
+  tbody
+    - @transportation_expenses.each do |transportation_expense|
+      tr
+        td = transportation_expense.destination
+        td = transportation_expense.route
+        td = transportation_expense.destination_from
+        td = transportation_expense.destination_to
+        td = transportation_expense.is_round_trip
+        td = transportation_expense.cost
+        td = link_to 'Show', transportation_expense
+        td = link_to 'Edit', edit_transportation_expense_path(transportation_expense)
+        td = link_to 'Destroy', transportation_expense, data: { confirm: 'Are you sure?' }, method: :delete
+
+br
+
+= link_to 'New Transportation expense', new_transportation_expense_path

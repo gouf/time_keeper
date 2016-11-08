@@ -1,0 +1,2 @@
+class TransportationExpense < ApplicationRecord
+end
