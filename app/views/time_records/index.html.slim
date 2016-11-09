@@ -45,15 +45,15 @@ br
       - @time_records.each_with_index do |time_record, i|
         tr
           td = l time_record.work_date, format: '%d日(%a)'
-          td = time_record.work_time_pattern&.name
-          td = time_record.work_time_pattern&.work_started_at.try { |x| x.strftime('%H:%M') }
-          td = time_record.work_time_pattern&.work_ended_at.try { |x| x.strftime('%H:%M') }
-          td = time_record.rest_time&.strftime('%H:%M')
-          td = time_record.work_started_at&.strftime('%H:%M')
-          td = time_record.work_ended_at&.strftime('%H:%M')
-          td = @work_time[i][:work_time][:work_time].strftime('%H:%M')
-          td = @work_time[i][:residual_time].strftime('%H:%M')
-          td = time_record.description
+          td = time_record.work_time_pattern&.name || '-'
+          td = time_record.work_time_pattern&.work_started_at.try { |x| x.strftime('%H:%M') } || '-'
+          td = time_record.work_time_pattern&.work_ended_at.try { |x| x.strftime('%H:%M') } || '-'
+          td = time_record.rest_time&.strftime('%H:%M') || '-'
+          td = time_record.work_started_at&.strftime('%H:%M') || '-'
+          td = time_record.work_ended_at&.strftime('%H:%M') || '-'
+          td = @work_time[i][:work_time][:work_time].strftime('%H:%M') || '-'
+          td = @work_time[i][:residual_time].strftime('%H:%M') || '-'
+          td = time_record.description.present? ? time_record.description : '-'
           td colspan="3" = link_to '表示', time_record
           td = link_to '編集', edit_time_record_path(time_record)
           td = link_to '削除', time_record, data: { confirm: '本当に削除しますか?' }, method: :delete
