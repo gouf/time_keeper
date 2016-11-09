@@ -84,7 +84,7 @@ class TransportationExpensesController < ApplicationController
   end
 
   def calculate_transportation_expense(transportation_expenses)
-    # TODO : 当月の交通費の合計を算出する
+    transportation_expenses.map { |t| t.cost.to_i }.inject(:+)
   end
 
   def map_transportation_expenses_to_calender(month:, year:)

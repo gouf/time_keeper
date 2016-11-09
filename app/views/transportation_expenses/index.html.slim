@@ -75,7 +75,11 @@
           td = link_to 'Show', transportation_expense
           td = link_to 'Edit', edit_transportation_expense_path(transportation_expense)
           td = link_to 'Destroy', transportation_expense, data: { confirm: 'Are you sure?' }, method: :delete
-
+      tr
+        td colspan="5"
+        td.text-right 合計
+        td = number_to_currency(@cost.to_i, unit: '￥', format: '%u%n') || '-'
+        td colspan="3"
 br
 
 = link_to 'New Transportation expense', new_transportation_expense_path
