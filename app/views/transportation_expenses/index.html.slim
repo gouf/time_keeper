@@ -52,25 +52,25 @@
       - @transportation_expenses.each do |transportation_expense|
         tr
           / 利用日
-          td = transportation_expense.use_date
+          td = l(transportation_expense.use_date, format: '%d日(%a)') || '-'
 
           / 行き先(目的地)
-          td = transportation_expense.destination
+          td = transportation_expense.destination || '-'
 
           / 往復
-          td = transportation_expense.is_round_trip ? '往復' : '片道'
+          td = is_round_trip(transportation_expense) || '-'
 
           / 経路(移動手段)
-          td = transportation_expense.route
+          td = transportation_expense.route || '-'
 
           / 出発(駅・バス停)
-          td = transportation_expense.destination_from
+          td = transportation_expense.destination_from || '-'
 
           / 到着
-          td = transportation_expense.destination_to
+          td = transportation_expense.destination_to || '-'
 
           / 金額
-          td = transportation_expense.cost
+          td = number_to_currency(transportation_expense.cost, unit: '￥', format: '%u%n') || '-'
 
           td = link_to 'Show', transportation_expense
           td = link_to 'Edit', edit_transportation_expense_path(transportation_expense)
