@@ -1,6 +1,5 @@
 class TimeRecordsController < ApplicationController
   before_action :set_time_record, only: [:show, :edit, :update, :destroy]
-  before_action :set_year_month_instance_variable, only: [:index]
 
   # GET /time_records
   # GET /time_records.json
@@ -82,32 +81,6 @@ class TimeRecordsController < ApplicationController
       :work_ended_at,
       :description
     )
-  end
-
-  def set_year_month_instance_variable
-    # params[:year], params[:month] 情報から年月の表示を移動する
-    # 次点 session[:year], session[:month] から取り出し
-    # なければ現在の年・月から値を設定
-    @year, @month =
-      [
-        params[:year].nil? ? nil : params[:year].to_i,
-        params[:month].nil? ? nil : params[:month].to_i
-      ]
-
-    @year ||= session[:year]
-    @month ||= session[:month]
-
-    @year ||= Date.today.year
-    @month ||= Date.today.month
-
-    # 月がその範囲を踏み切ったときに年を移動する
-    @month, @year = [12, @year - 1] if @month < 1
-    @month, @year = [1, @year + 1] if @month > 12
-
-    # 値をセッションに保存して再利用する
-    # レコード 編集後のページ遷移に対応する
-    session[:year] = @year
-    session[:month] = @month
   end
 
   def map_time_records_to_calender(month:, year:)
