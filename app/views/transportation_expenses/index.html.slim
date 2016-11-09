@@ -1,0 +1,85 @@
+.container
+  h1 交通費一覧
+  = form_for(@transportation_expense, html: {class: 'form col-md-12'}) do |f|
+    / = f.hidden_field :use_date, value: Date.today
+    .row
+      .form-group.col-md-12.pull-left
+        = f.label :use_date, '利用日'
+        = f.date_field :use_date, class: 'text-right use-date'
+    .row
+      .form-group.col-md-2.col-md-offset-1
+        = f.label :destination, '行き先(目的地)'
+        = f.text_field :destination, class: 'tall-input'
+      .form-group.col-md-9
+        = f.label :is_round_trip, '往復'
+        = f.check_box :is_round_trip, class: 'x-large-checkbox'
+    .row
+      .form-group.col-md-11.col-md-offset-1
+        = f.label :route, '経路(移動手段)'
+        = f.text_field :route, class: 'tall-input'
+    .row
+      .form-group.col-md-3.col-md-offset-1
+        = f.label :destination_from, '出発 (駅・バス停)'
+        = f.text_field :destination_from, class: 'tall-input'
+      .form-group.from-to.col-md-1
+        span ~
+      .form-group.col-md-4
+        = f.label :destination_to, '到着'
+        = f.text_field :destination_to, class: 'tall-input'
+    .row
+      .form-group.col-md-4.col-md-offset-1
+        = f.label :cost, '金額'
+        = f.number_field :cost, class: 'tall-input cost text-right', value: '0'
+      .form-group.col-md-11
+        = f.submit 'submit', class: 'btn btn-primary actions v-center-submit'
+.container
+  h2.text-center = year_month_display
+  table.table.table-striped
+    thead
+      tr
+        th 利用日
+        th 行き先(目的地)
+        th 往復/片道
+        th 経路(移動手段)
+        th 出発(駅・バス停)
+        th 到着
+        th 金額
+        th
+        th
+        th
+
+    tbody
+      - @transportation_expenses.each do |transportation_expense|
+        tr
+          / 利用日
+          td = l(transportation_expense.use_date, format: '%d日(%a)') || '-'
+
+          / 行き先(目的地)
+          td = transportation_expense.destination || '-'
+
+          / 往復
+          td = is_round_trip(transportation_expense) || '-'
+
+          / 経路(移動手段)
+          td = transportation_expense.route || '-'
+
+          / 出発(駅・バス停)
+          td = transportation_expense.destination_from || '-'
+
+          / 到着
+          td = transportation_expense.destination_to || '-'
+
+          / 金額
+          td = number_to_currency(transportation_expense.cost, unit: '￥', format: '%u%n') || '-'
+
+          td = link_to 'Show', transportation_expense
+          td = link_to 'Edit', edit_transportation_expense_path(transportation_expense)
+          td = link_to 'Destroy', transportation_expense, data: { confirm: 'Are you sure?' }, method: :delete
+      tr
+        td colspan="5"
+        td.text-right 合計
+        td = number_to_currency(@cost.to_i, unit: '￥', format: '%u%n') || '-'
+        td colspan="3"
+br
+
+= link_to 'New Transportation expense', new_transportation_expense_path
