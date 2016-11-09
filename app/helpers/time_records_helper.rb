@@ -54,6 +54,8 @@ module TimeRecordsHelper
       end
     return empty_set.call if WorkTimePattern.all.size.zero?
 
+    # 勤務パターンを開始終了時刻を含めて表示
+    # eg. パターン1 : hh:mm - hh:mm
     option_label =
       proc do |record|
         "#{record.name} :  #{record.work_started_at.strftime('%H:%M')} - #{record.work_ended_at.strftime('%H:%M')}"
@@ -62,6 +64,7 @@ module TimeRecordsHelper
     content_tag(
       :select,
       raw(
+        content_tag(:option, '選択してください') +
         WorkTimePattern.all.inject('') do |x, r|
           x + content_tag(:option, option_label.call(r), value: r.id)
         end
