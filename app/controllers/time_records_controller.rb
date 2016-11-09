@@ -144,3 +144,4 @@ class TimeRecordsController < ApplicationController
     end
   end
 end
+

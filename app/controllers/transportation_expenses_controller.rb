@@ -4,8 +4,10 @@ class TransportationExpensesController < ApplicationController
   # GET /transportation_expenses
   # GET /transportation_expenses.json
   def index
-    @transportation_expense = TransportationExpense.new(use_date: Date.today)
-    @transportation_expenses = TransportationExpense.all
+    @transportation_expenses = map_transportation_expenses_to_calender(month: @month, year: @year)
+    @transportation_expense = TransportationExpense.find_by_use_date(params[:use_date] || Date.today)
+
+    @cost = calculate_transportation_expense(@transportation_expenses)
   end
 
   # GET /transportation_expenses/1
@@ -79,5 +81,40 @@ class TransportationExpensesController < ApplicationController
       :is_round_trip,
       :cost
     )
+  end
+
+  def calculate_transportation_expense(transportation_expenses)
+  end
+
+  def map_transportation_expenses_to_calender(month:, year:)
+    # 当月の日付分、TransportationExpense オブジェクトを用意する
+    # * 当月の日が何日あるかを調べる
+    # * 全レコードから当該日付にマッピングする
+    # @transportation_expense_records に代入する
+
+    # 当月の日付分、TransportationExpense オブジェクトを用意する
+    # * 当月の日が何日あるかを調べる
+    days_in_month = Time.days_in_month(month, year)
+
+    # すでに指定年月のレコードが作成されていれば
+    # SQL クエリから結果を返す
+    query_result = TransportationExpense.find_by_use_date_in_month_year(month, year).order(:use_date)
+    result_size = query_result.count('*')
+    return query_result if result_size.eql?(days_in_month)
+
+    # 1日目から月末まで
+    # カレンダーの日付にマッピングしていく
+    1.step(days_in_month).map do |day|
+      date = Date.new(year, month, day)
+      # model association の設定で外部ID 入力必須のため
+      # バリデーション回避オプションを有効化
+      if transportation_expense_record = TransportationExpense.find_by_use_date(date)
+        transportation_expense_record
+      else
+        transportation_expense_record = TransportationExpense.new(use_date: date)
+        transportation_expense_record.save(validate: false)
+        transportation_expense_record
+      end
+    end
   end
 end
