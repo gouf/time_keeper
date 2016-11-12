@@ -62,14 +62,23 @@ module TimeRecordsHelper
         "#{record.name} :  #{record.work_started_at.strftime('%H:%M')} - #{record.work_ended_at.strftime('%H:%M')}"
       end
 
+    # WorkTimePattern から得たレコードを<option/> として生成
+    work_time_patterns_in_option =
+      proc do
+        work_time_patterns =
+          WorkTimePattern.all.inject('') do |result, record|
+            result + content_tag(:option, option_label.call(record), value: record.id)
+          end
+      end
+
+    # <select/> で使う<options/> の生成
+    options =
+      content_tag(:option, '選択してください') +
+      raw(work_time_patterns_in_option.call)
+
     content_tag(
       :select,
-      raw(
-        content_tag(:option, '選択してください') +
-        WorkTimePattern.all.inject('') do |x, r|
-          x + content_tag(:option, option_label.call(r), value: r.id)
-        end
-      ),
+      options,
       name: 'time_record[work_time_pattern_id]',
       id: 'time_record_work_time_pattern_id',
       class: 'work-patterns'
