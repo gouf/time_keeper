@@ -31,6 +31,7 @@ module TimeRecordsHelper
   end
 
   def worked_time(work_time)
+    # 勤務時間を時・分に分けて合算
     hour = work_time.map { |x| x.dig(:work_time, :hour).to_i }.inject(:+)
     min = work_time.map { |x| x.dig(:work_time, :min).to_i }.inject(:+)
 
@@ -61,14 +62,23 @@ module TimeRecordsHelper
         "#{record.name} :  #{record.work_started_at.strftime('%H:%M')} - #{record.work_ended_at.strftime('%H:%M')}"
       end
 
+    # WorkTimePattern から得たレコードを<option/> として生成
+    work_time_patterns_in_option =
+      proc do
+        work_time_patterns =
+          WorkTimePattern.all.inject('') do |result, record|
+            result + content_tag(:option, option_label.call(record), value: record.id)
+          end
+      end
+
+    # <select/> で使う<options/> の生成
+    options =
+      content_tag(:option, '選択してください') +
+      raw(work_time_patterns_in_option.call)
+
     content_tag(
       :select,
-      raw(
-        content_tag(:option, '選択してください') +
-        WorkTimePattern.all.inject('') do |x, r|
-          x + content_tag(:option, option_label.call(r), value: r.id)
-        end
-      ),
+      options,
       name: 'time_record[work_time_pattern_id]',
       id: 'time_record_work_time_pattern_id',
       class: 'work-patterns'
