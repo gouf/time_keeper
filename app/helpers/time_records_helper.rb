@@ -84,4 +84,45 @@ module TimeRecordsHelper
       class: 'work-patterns'
     )
   end
+
+  def transportation_expenses_pattern_select
+    # 交通費パターン未登録時に、登録を促すメッセージを表示
+    empty_set =
+      proc do
+        content_tag(:select,
+          content_tag(:option, '※交通費パターンを登録してください'),
+          id: 'transportation_expense_pattern_id',
+          class: 'work-patterns'
+        )
+      end
+    return empty_set.call if TransportationExpensePattern.all.size.zero?
+
+    # 勤務パターンを開始終了時刻を含めて表示
+    # eg. パターン1 : hh:mm - hh:mm
+    option_label =
+      proc do |record|
+        "#{record.destination}(#{record.route}) - #{record.destination_from} 〜 #{record.destination_to}"
+      end
+
+    # WorkTimePattern から得たレコードを<option/> として生成
+    transportation_expenses_in_option =
+      proc do
+        TransportationExpensePattern.all.inject('') do |result, record|
+          result + content_tag(:option, option_label.call(record), value: record.id)
+        end
+      end
+
+    # <select/> で使う<options/> の生成
+    options =
+      content_tag(:option, '選択してください') +
+      raw(transportation_expenses_in_option.call)
+
+    content_tag(
+      :select,
+      options,
+      name: 'time_record[transportation_expense_pattern_id]',
+      id: 'time_record_transportation_expense_pattern_id',
+      class: 'work-patterns'
+    )
+  end
 end
