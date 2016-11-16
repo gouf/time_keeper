@@ -1,2 +1,12 @@
 h1 TransportationExpensePatterns#index
 p Find me in app/views/transportation_expense_patterns/index.html.slim
+
+/ TODO : ユーザによる交通費登録フォームの増減とそれの一括登録・編集を可能にする
+- @transportation_expense_models.each do |model|
+  = model.destination
+  = model.route
+  = model.destination_from
+  = model.destination_to
+  = model.is_round_trip
+  = model.cost
+  / = model.use_date
