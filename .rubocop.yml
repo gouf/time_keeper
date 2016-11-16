@@ -1,5 +1,6 @@
 # Ref: https://github.com/bbatsov/rubocop/blob/master/config/default.yml
 AllCops:
+  TargetRubyVersion: 2.3
   Rails:
     Enabled: true
   Exclude:
