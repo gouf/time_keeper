@@ -48,10 +48,9 @@ module TimeRecordsHelper
     empty_set =
       proc do
         content_tag(:select,
-          content_tag(:option, '※勤務パターンを登録してください'),
-          id: 'time_record_work_time_pattern_id',
-          class: 'work-patterns'
-        )
+                    content_tag(:option, '※勤務パターンを登録してください'),
+                    id: 'time_record_work_time_pattern_id',
+                    class: 'work-patterns')
       end
     return empty_set.call if WorkTimePattern.all.size.zero?
 
@@ -90,10 +89,9 @@ module TimeRecordsHelper
     empty_set =
       proc do
         content_tag(:select,
-          content_tag(:option, '※交通費パターンを登録してください'),
-          id: 'transportation_expense_pattern_id',
-          class: 'work-patterns'
-        )
+                    content_tag(:option, '※交通費パターンを登録してください'),
+                    id: 'transportation_expense_pattern_id',
+                    class: 'work-patterns')
       end
     return empty_set.call if TransportationExpensePattern.all.size.zero?
 

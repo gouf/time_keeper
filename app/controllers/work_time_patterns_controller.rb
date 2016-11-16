@@ -62,13 +62,14 @@ class WorkTimePatternsController < ApplicationController
   end
 
   private
-    # Use callbacks to share common setup or constraints between actions.
-    def set_work_time_pattern
-      @work_time_pattern = WorkTimePattern.find(params[:id])
-    end
 
-    # Never trust parameters from the scary internet, only allow the white list through.
-    def work_time_pattern_params
-      params.require(:work_time_pattern).permit(:name, :work_started_at, :work_ended_at)
-    end
+  # Use callbacks to share common setup or constraints between actions.
+  def set_work_time_pattern
+    @work_time_pattern = WorkTimePattern.find(params[:id])
+  end
+
+  # Never trust parameters from the scary internet, only allow the white list through.
+  def work_time_pattern_params
+    params.require(:work_time_pattern).permit(:name, :work_started_at, :work_ended_at)
+  end
 end
