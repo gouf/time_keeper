@@ -99,7 +99,8 @@ module TimeRecordsHelper
     # eg. パターン1 : hh:mm - hh:mm
     option_label =
       proc do |record|
-        "#{record.destination}(#{record.route}) - #{record.destination_from} 〜 #{record.destination_to}"
+        # "#{record.destination}(#{record.route}) - #{record.destination_from} 〜 #{record.destination_to}"
+        "#{record.name}"
       end
 
     # WorkTimePattern から得たレコードを<option/> として生成

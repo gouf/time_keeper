@@ -1,12 +1,101 @@
 h1 TransportationExpensePatterns#index
 p Find me in app/views/transportation_expense_patterns/index.html.slim
 
-/ TODO : ユーザによる交通費登録フォームの増減とそれの一括登録・編集を可能にする
-- @transportation_expense_models.each do |model|
-  = model.destination
-  = model.route
-  = model.destination_from
-  = model.destination_to
-  = model.is_round_trip
-  = model.cost
+/ TODO : 登録された交通費パターンの選択で、関連付けた交通費一覧を出力する
+/ TODO : 交通費パターンに関連付けられた交通費一覧から、個別のレコードに対する編集機能を有効にする
+
+/ TODO : #index にごった煮になっている機能を各アクションに分割する
+/ TODO : #new ~ #create では交通費パターン名の新規登録を可能にする
+/ TODO : #index の交通費パターン名一覧の項目クリックから、パターン名に関連付けられた、交通費の登録を可能にする
+
+/ 交通費パターンの新規登録
+.container
+  h3 交通費パターンの新規登録
+  = form_for(@transportation_expense_pattern, class: 'form') do |f|
+    .form-group
+      = f.label :name, '交通費パターン名'
+      = f.text_field :name, class: 'tall-input'
+    .form-group
+      = f.submit 'submit', class: 'btn btn-primary'
+
+/ 交通費 + 交通費パターン関連付け 新規追加フォーム
+.container
+  h3 パターン名に関連付ける交通費の新規登録
+  = form_for(@transportation_expense, class: 'form') do |f|
+    .row
+      .form-group.col-md-12
+        = f.label :transportation_expense_pattern, '交通費パターン名'
+        = collection_select(:transportation_expense_pattern, :transportation_expense_id, TransportationExpensePattern.all, :id, :name, prompt: true)
+
+    .row
+      .form-group.col-md-2.
+        = f.label :destination, '行き先(目的地)'
+        = f.text_field :destination, class: 'tall-input'
+      .form-group.col-md-9
+        = f.label :is_round_trip, '往復'
+        = f.check_box :is_round_trip, class: 'x-large-checkbox'
+    .row
+      .form-group.col-md-11.
+        = f.label :route, '経路(移動手段)'
+        = f.text_field :route, class: 'tall-input'
+    .row
+      .form-group.col-md-2
+        = f.label :destination_from, '出発 (駅・バス停)'
+        = f.text_field :destination_from, class: 'tall-input'
+      .form-group.from-to.col-md-1
+        span ~
+      .form-group.col-md-2
+        = f.label :destination_to, '到着'
+        = f.text_field :destination_to, class: 'tall-input'
+    .row
+      .form-group.col-md-4.
+        = f.label :cost, '金額'
+        = f.number_field :cost, class: 'tall-input cost text-right', value: '0'
+      .form-group.col-md-11
+        = f.submit 'submit', class: 'btn btn-primary'
   / = model.use_date
+
+/ 交通費パターンに関連付けられた交通費の一覧表示
+.container
+  = @transportation_expenses.size.zero? ? '' : content_tag(:h3, 'パターンに関連付けられた交通費一覧')
+  - @transportation_expenses.each do |model|
+    .row
+      .form-group.col-md-2.
+        / = model.label :destination, '行き先(目的地)'
+        label 行き先(目的地)
+        .tall-input = model.destination
+      .form-group.col-md-9
+        / = model.label :is_round_trip, '往復'
+        label 往復
+        .x-large-checkbox = model.is_round_trip
+    .row
+      .form-group.col-md-11.
+        / = model.label :route, '経路(移動手段)'
+        label 経路(移動手段)
+        .tall-input = model.route
+    .row
+      .form-group.col-md-2
+        / = model.label :destination_from, '出発 (駅・バス停)'
+        label 出発 (駅・バス停)
+        .tall-input = model.destination_from
+      .form-group.from-to.col-md-1
+        span ~
+      .form-group.col-md-2
+        / = model.label :destination_to, '到着'
+        label 到着
+        .tall-inptu = model.destination_to
+    .row
+      .form-group.col-md-4.
+        / = model.label :cost, '金額'
+        label 金額
+        .tall-input.cost.text-right = model.cost
+
+.contaner
+  h3 交通費パターン名一覧
+  table.table.table-striped
+    thead
+      th 名前
+    tbody
+    - TransportationExpensePattern.all.each do |record|
+      tr
+        td = record.name
