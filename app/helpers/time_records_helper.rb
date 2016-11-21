@@ -73,7 +73,7 @@ module TimeRecordsHelper
 
     # <select/> で使う<options/> の生成
     options =
-      content_tag(:option, '選択してください') +
+      content_tag(:option, '選択してください', value: '') +
       raw(work_time_patterns_in_option.call)
 
     content_tag(

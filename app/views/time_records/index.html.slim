@@ -38,6 +38,9 @@ br
         th 退勤時間
         th 稼働時間
         th 通常残業
+        th 遅刻
+        th 早退
+        th 欠勤
         th 備考
         th 操作
 
@@ -53,6 +56,9 @@ br
           td = time_record.work_ended_at&.strftime('%H:%M') || '-'
           td = @work_time[i][:work_time][:work_time].strftime('%H:%M') || '-'
           td = @work_time[i][:residual_time].strftime('%H:%M') || '-'
+          td = time_record.is_late ? '○' : '-'
+          td = time_record.is_leave_work_early ? '○' : '-'
+          td = time_record.is_absent ? '○' : '-'
           td = time_record.description.present? ? time_record.description : '-'
           td colspan="3" = link_to '表示', time_record
           td = link_to '編集', edit_time_record_path(time_record)
