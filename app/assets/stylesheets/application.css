@@ -16,3 +16,7 @@
 /*
  *= require nprogress
  */
+
+.large-submit {
+  height: 2.9em;
+}
