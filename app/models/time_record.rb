@@ -36,4 +36,38 @@ class TimeRecord < ApplicationRecord
     end
     save
   end
+
+  # クラスメソッドの定義
+  class << self
+    # 土日祝祭日を除いた合計勤務日を返す
+    # 日曜(振替休日)・平日に祝祭日があれば勤務すべき日数を減算する
+    def workdays_of_month(year:, month:)
+
+      first_day_of_month = Date.new(year, month, 1)
+      last_day_of_month = (Date.new(year, month + 1, 1) - 1.day) # 月末の算出
+
+      # 祝祭日のハッシュ( 日付 => 祝祭日名 )を得る
+      # Note: 動作に不具合が出た場合、このgem のアップデートないし乗り換えを検討する
+      holidays = HolidayJapan.between(first_day_of_month, last_day_of_month)
+
+      # 当月の土曜・日曜を除いた日数を得る
+      weekdays_count =
+        (first_day_of_month..last_day_of_month)
+        .find_all { |day| day.on_weekday? }
+        .size
+
+      # 祝祭日が
+      # * 土曜であれば 0
+      # * 日曜であれば振替休日 1
+      # * 平日であれば 1
+      # として勤務すべき日数からの減算対象として加える
+      holidays_count =
+        holidays
+        .keys
+        .map { |date| date.saturday? ? 0 : 1 }
+        .inject(:+)
+
+      weekdays_count - holidays_count
+    end
+  end
 end

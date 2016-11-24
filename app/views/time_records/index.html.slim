@@ -65,7 +65,7 @@ br
           td = link_to '削除', time_record, data: { confirm: '本当に削除しますか?' }, method: :delete
       tr
         td &nbsp;
-        td.text-center colspan="2" = "満勤 #{@time_records.find_all{ |r| (0..4).include?(r.work_date.wday) }.size}"
+        td.text-center colspan="2" = "満勤 #{@workdays_of_month}"
         td &nbsp;
         td &nbsp;
         td = worked_time(@work_time)
