@@ -8,6 +8,7 @@ class TimeRecordsController < ApplicationController
     @time_record = TimeRecord.find_by_work_date(params[:work_date] || Date.today)
 
     @work_time = calculate_work_time(@time_records)
+    @workdays_of_month = TimeRecord.workdays_of_month(month: @month, year: @year)
   end
 
   # GET /time_records/1
