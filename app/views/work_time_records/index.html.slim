@@ -25,7 +25,7 @@
 br
 br
 .container
-  h2.text-center = year_month_display(time_records_path)
+  h2.text-center = year_month_display(work_time_records_path)
   table.table.table-striped
     thead
       tr
@@ -61,7 +61,7 @@ br
           td = time_record.is_absent ? '○' : '-'
           td = time_record.description.present? ? time_record.description : '-'
           td colspan="3" = link_to '表示', time_record
-          td = link_to '編集', edit_time_record_path(time_record)
+          td = link_to '編集', edit_work_time_record_path(time_record)
           td = link_to '削除', time_record, data: { confirm: '本当に削除しますか?' }, method: :delete
       tr
         td &nbsp;
@@ -75,4 +75,4 @@ br
 
 br
 
-= link_to 'New Time record', new_time_record_path
+= link_to 'New Time record', new_work_time_record_path

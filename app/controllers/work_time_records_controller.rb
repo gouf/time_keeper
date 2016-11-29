@@ -1,14 +1,14 @@
-class TimeRecordsController < ApplicationController
+class WorkTimeRecordsController < ApplicationController
   before_action :set_time_record, only: [:show, :edit, :update, :destroy]
 
   # GET /time_records
   # GET /time_records.json
   def index
     @time_records = map_time_records_to_calender(month: @month, year: @year)
-    @time_record = TimeRecord.find_by_work_date(params[:work_date] || Date.today)
+    @time_record = WorkTimeRecord.find_by_work_date(params[:work_date] || Date.today)
 
     @work_time = calculate_work_time(@time_records)
-    @workdays_of_month = TimeRecord.workdays_of_month(month: @month, year: @year)
+    @workdays_of_month = WorkTimeRecord.workdays_of_month(month: @month, year: @year)
   end
 
   # GET /time_records/1
@@ -18,7 +18,7 @@ class TimeRecordsController < ApplicationController
 
   # GET /time_records/new
   def new
-    @time_record = TimeRecord.new
+    @time_record = WorkTimeRecord.new
   end
 
   # GET /time_records/1/edit
@@ -28,7 +28,7 @@ class TimeRecordsController < ApplicationController
   # POST /time_records
   # POST /time_records.json
   def create
-    @time_record = TimeRecord.new(time_record_params)
+    @time_record = WorkTimeRecord.new(time_record_params)
 
     respond_to do |format|
       if @time_record.save
@@ -47,7 +47,7 @@ class TimeRecordsController < ApplicationController
     respond_to do |format|
       if @time_record.update(time_record_params)
         @time_record.save_attendance_state
-        format.html { redirect_to time_records_path, notice: 'Time record was successfully updated.' }
+        format.html { redirect_to work_time_records_path, notice: 'Time record was successfully updated.' }
         format.json { render :show, status: :ok, location: @time_record }
       else
         format.html { render :edit }
@@ -70,7 +70,7 @@ class TimeRecordsController < ApplicationController
 
   # Use callbacks to share common setup or constraints between actions.
   def set_time_record
-    @time_record = TimeRecord.find(params[:id])
+    @time_record = WorkTimeRecord.find(params[:id])
   end
 
   # Never trust parameters from the scary internet, only allow the white list through.
@@ -86,18 +86,18 @@ class TimeRecordsController < ApplicationController
   end
 
   def map_time_records_to_calender(month:, year:)
-    # 当月の日付分、TimeRecord オブジェクトを用意する
+    # 当月の日付分、WorkTimeRecord オブジェクトを用意する
     # * 当月の日が何日あるかを調べる
     # * 全レコードから当該日付にマッピングする
     # @time_records に代入する
 
-    # 当月の日付分、TimeRecord オブジェクトを用意する
+    # 当月の日付分、WorkTimeRecord オブジェクトを用意する
     # * 当月の日が何日あるかを調べる
     days_in_month = Time.days_in_month(month, year)
 
     # すでに指定年月のレコードが作成されていれば
     # SQL クエリから結果を返す
-    query_result = TimeRecord.find_by_work_date_in_month_year(month, year).order(:work_date)
+    query_result = WorkTimeRecord.find_by_work_date_in_month_year(month, year).order(:work_date)
     result_size = query_result.count('*')
     return query_result if result_size.eql?(days_in_month)
 
@@ -107,10 +107,10 @@ class TimeRecordsController < ApplicationController
       date = Date.new(year, month, day)
       # model association の設定で外部ID 入力必須のため
       # バリデーション回避オプションを有効化
-      if time_record = TimeRecord.find_by_work_date(date)
+      if time_record = WorkTimeRecord.find_by_work_date(date)
         time_record
       else
-        time_record = TimeRecord.new(work_date: date)
+        time_record = WorkTimeRecord.new(work_date: date)
         time_record.save(validate: false)
         time_record
       end

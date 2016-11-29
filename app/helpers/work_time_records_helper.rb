@@ -1,4 +1,4 @@
-module TimeRecordsHelper
+module WorkTimeRecordsHelper
   def worked_time(work_time)
     # 勤務時間を時・分に分けて合算
     hour = work_time.map { |x| x.dig(:work_time, :hour).to_i }.inject(:+)
