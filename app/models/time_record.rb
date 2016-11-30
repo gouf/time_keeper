@@ -1,2 +1,0 @@
-class TimeRecord < ApplicationRecord
-end

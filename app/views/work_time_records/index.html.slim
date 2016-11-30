@@ -1,0 +1,78 @@
+
+.container
+  h1 勤怠表
+  = form_for(@time_record, html: {class: 'form-inline'}) do |f|
+    = f.hidden_field :work_date, value: Date.today
+    .form-group
+      = f.label :number_field, '勤務パターン'
+      = work_time_pattern_select
+    .form-group
+      = f.label :rest_time, '休憩時間'
+      = f.time_field :rest_time
+    .form-group
+      = f.label :work_started_at, '出勤時間'
+      = f.time_field :work_started_at
+      input.btn.btn-default.fill-time-at-now type='button' value='現在時刻'
+    .form-group
+      = f.label :work_ended_at, '退勤時間'
+      = f.time_field :work_ended_at
+      input.btn.btn-default.fill-time-at-now type='button' value='現在時刻'
+    .form-group
+      = f.label :description, '備考'
+      = f.text_field :description, class: 'work-patterns'
+    button.btn.btn-primary.time-record-submit.large-submit type='submit' submit
+
+br
+br
+.container
+  h2.text-center = year_month_display(work_time_records_path)
+  table.table.table-striped
+    thead
+      tr
+        th 日付
+        th 勤務パターン
+        th 勤務開始時間
+        th 勤務終了時間
+        th 休憩時間
+        th 出勤時間
+        th 退勤時間
+        th 稼働時間
+        th 通常残業
+        th 遅刻
+        th 早退
+        th 欠勤
+        th 備考
+        th 操作
+
+    tbody
+      - @time_records.each_with_index do |time_record, i|
+        tr
+          td = l time_record.work_date, format: '%d日(%a)'
+          td = time_record.work_time_pattern&.name || '-'
+          td = time_record.work_time_pattern&.work_started_at.try { |x| x.strftime('%H:%M') } || '-'
+          td = time_record.work_time_pattern&.work_ended_at.try { |x| x.strftime('%H:%M') } || '-'
+          td = time_record.rest_time&.strftime('%H:%M') || '-'
+          td = time_record.work_started_at&.strftime('%H:%M') || '-'
+          td = time_record.work_ended_at&.strftime('%H:%M') || '-'
+          td = @work_time[i][:work_time][:work_time].strftime('%H:%M') || '-'
+          td = @work_time[i][:residual_time].strftime('%H:%M') || '-'
+          td = time_record.is_late ? '○' : '-'
+          td = time_record.is_leave_work_early ? '○' : '-'
+          td = time_record.is_absent ? '○' : '-'
+          td = time_record.description.present? ? time_record.description : '-'
+          td colspan="3" = link_to '表示', time_record
+          td = link_to '編集', edit_work_time_record_path(time_record)
+          td = link_to '削除', time_record, data: { confirm: '本当に削除しますか?' }, method: :delete
+      tr
+        td &nbsp;
+        td.text-center colspan="2" = "満勤 #{@workdays_of_month}"
+        td &nbsp;
+        td &nbsp;
+        td = worked_time(@work_time)
+        td &nbsp;
+        td &nbsp;
+        td colspan="3" &nbsp;
+
+br
+
+= link_to 'New Time record', new_work_time_record_path

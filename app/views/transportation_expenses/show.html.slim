@@ -1,0 +1,24 @@
+p#notice = notice
+
+p
+  strong Destination:
+  = @transportation_expense.destination
+p
+  strong Route:
+  = @transportation_expense.route
+p
+  strong Destination from:
+  = @transportation_expense.destination_from
+p
+  strong Destination to:
+  = @transportation_expense.destination_to
+p
+  strong Is round trip:
+  = @transportation_expense.is_round_trip
+p
+  strong Cost:
+  = @transportation_expense.cost
+
+= link_to 'Edit', edit_transportation_expense_path(@transportation_expense)
+'|
+= link_to 'Back', transportation_expenses_path

@@ -1,0 +1,27 @@
+= form_for(@transportation_expense, html: {class: 'form-inline'}) do |f|
+  - if @transportation_expense.errors.any?
+    #error_explanation
+      h2 = "#{pluralize(@transportation_expense.errors.count, "error")} prohibited this transportation_expense from being saved:"
+      ul
+        - @transportation_expense.errors.full_messages.each do |message|
+          li = message
+
+  .field
+    = f.label :destination, '行き先(目的地)'
+    = f.text_field :destination
+  .field
+    = f.label :route
+    = f.text_field :route
+  .field
+    = f.label :destination_from
+    = f.text_field :destination_from
+  .field
+    = f.label :destination_to
+    = f.text_field :destination_to
+  .field
+    = f.label :is_round_trip
+    = f.check_box :is_round_trip
+  .field
+    = f.label :cost
+    = f.number_field :cost
+  .actions = f.submit
