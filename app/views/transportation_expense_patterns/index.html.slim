@@ -14,7 +14,7 @@ p Find me in app/views/transportation_expense_patterns/index.html.slim
   = form_for(@transportation_expense_pattern, class: 'form') do |f|
     .form-group
       = f.label :name, '交通費パターン名'
-      = f.text_field :name, class: 'tall-input'
+      = f.text_field :name, class: 'tall-input', placeholder: '例:' << Date.today.strftime("%Y年%m月")
     .form-group
       = f.submit 'submit', class: 'btn btn-primary'
 
