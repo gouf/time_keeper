@@ -30,9 +30,8 @@ class WorkTimeRecord < ApplicationRecord
     return if work_time_pattern_id.nil?
 
     # 遅刻・早退・欠勤条件に合致する/しない場合 当該属性値に true/false を設定
-    %w(late leave_work_early absent).each do |method_attribute_name|
-      attribute = method_name = method_attribute_name
-      method("is_#{attribute}=".to_sym).call(method("#{method_name}?").call)
+    %w(late leave_work_early absent).each do |method_name|
+      method("is_#{method_name}=".to_sym).call(method("#{method_name}?").call)
     end
     save
   end
