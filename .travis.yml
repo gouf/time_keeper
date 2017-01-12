@@ -5,3 +5,4 @@ services:
   - postgresql
 script:
   - bin/rails db:migrate RAILS_ENV=test
+bundler_args: --without production development
