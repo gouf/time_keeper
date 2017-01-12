@@ -18,10 +18,10 @@ require 'rails_helper'
 # Message expectations are only used when there is no simpler way to specify
 # that an instance is receiving a specific message.
 
-RSpec.describe TimeRecordsController, type: :controller do
+RSpec.describe WorkTimeRecordsController, type: :controller do
 
   # This should return the minimal set of attributes required to create a valid
-  # TimeRecord. As you add validations to TimeRecord, be sure to
+  # WorkTimeRecord. As you add validations to WorkTimeRecord, be sure to
   # adjust the attributes here as well.
   let(:valid_attributes) {
     skip("Add a hash of attributes valid for your model")
@@ -33,12 +33,12 @@ RSpec.describe TimeRecordsController, type: :controller do
 
   # This should return the minimal set of values that should be in the session
   # in order to pass any filters (e.g. authentication) defined in
-  # TimeRecordsController. Be sure to keep this updated too.
+  # WorkTimeRecordsController. Be sure to keep this updated too.
   let(:valid_session) { {} }
 
   describe "GET #index" do
     it "assigns all time_records as @time_records" do
-      time_record = TimeRecord.create! valid_attributes
+      time_record = WorkTimeRecord.create! valid_attributes
       get :index, params: {}, session: valid_session
       expect(assigns(:time_records)).to eq([time_record])
     end
@@ -46,7 +46,7 @@ RSpec.describe TimeRecordsController, type: :controller do
 
   describe "GET #show" do
     it "assigns the requested time_record as @time_record" do
-      time_record = TimeRecord.create! valid_attributes
+      time_record = WorkTimeRecord.create! valid_attributes
       get :show, params: {id: time_record.to_param}, session: valid_session
       expect(assigns(:time_record)).to eq(time_record)
     end
@@ -55,13 +55,13 @@ RSpec.describe TimeRecordsController, type: :controller do
   describe "GET #new" do
     it "assigns a new time_record as @time_record" do
       get :new, params: {}, session: valid_session
-      expect(assigns(:time_record)).to be_a_new(TimeRecord)
+      expect(assigns(:time_record)).to be_a_new(WorkTimeRecord)
     end
   end
 
   describe "GET #edit" do
     it "assigns the requested time_record as @time_record" do
-      time_record = TimeRecord.create! valid_attributes
+      time_record = WorkTimeRecord.create! valid_attributes
       get :edit, params: {id: time_record.to_param}, session: valid_session
       expect(assigns(:time_record)).to eq(time_record)
     end
@@ -69,28 +69,28 @@ RSpec.describe TimeRecordsController, type: :controller do
 
   describe "POST #create" do
     context "with valid params" do
-      it "creates a new TimeRecord" do
+      it "creates a new WorkTimeRecord" do
         expect {
           post :create, params: {time_record: valid_attributes}, session: valid_session
-        }.to change(TimeRecord, :count).by(1)
+        }.to change(WorkTimeRecord, :count).by(1)
       end
 
       it "assigns a newly created time_record as @time_record" do
         post :create, params: {time_record: valid_attributes}, session: valid_session
-        expect(assigns(:time_record)).to be_a(TimeRecord)
+        expect(assigns(:time_record)).to be_a(WorkTimeRecord)
         expect(assigns(:time_record)).to be_persisted
       end
 
       it "redirects to the created time_record" do
         post :create, params: {time_record: valid_attributes}, session: valid_session
-        expect(response).to redirect_to(TimeRecord.last)
+        expect(response).to redirect_to(WorkTimeRecord.last)
       end
     end
 
     context "with invalid params" do
       it "assigns a newly created but unsaved time_record as @time_record" do
         post :create, params: {time_record: invalid_attributes}, session: valid_session
-        expect(assigns(:time_record)).to be_a_new(TimeRecord)
+        expect(assigns(:time_record)).to be_a_new(WorkTimeRecord)
       end
 
       it "re-renders the 'new' template" do
@@ -107,20 +107,20 @@ RSpec.describe TimeRecordsController, type: :controller do
       }
 
       it "updates the requested time_record" do
-        time_record = TimeRecord.create! valid_attributes
+        time_record = WorkTimeRecord.create! valid_attributes
         put :update, params: {id: time_record.to_param, time_record: new_attributes}, session: valid_session
         time_record.reload
         skip("Add assertions for updated state")
       end
 
       it "assigns the requested time_record as @time_record" do
-        time_record = TimeRecord.create! valid_attributes
+        time_record = WorkTimeRecord.create! valid_attributes
         put :update, params: {id: time_record.to_param, time_record: valid_attributes}, session: valid_session
         expect(assigns(:time_record)).to eq(time_record)
       end
 
       it "redirects to the time_record" do
-        time_record = TimeRecord.create! valid_attributes
+        time_record = WorkTimeRecord.create! valid_attributes
         put :update, params: {id: time_record.to_param, time_record: valid_attributes}, session: valid_session
         expect(response).to redirect_to(time_record)
       end
@@ -128,13 +128,13 @@ RSpec.describe TimeRecordsController, type: :controller do
 
     context "with invalid params" do
       it "assigns the time_record as @time_record" do
-        time_record = TimeRecord.create! valid_attributes
+        time_record = WorkTimeRecord.create! valid_attributes
         put :update, params: {id: time_record.to_param, time_record: invalid_attributes}, session: valid_session
         expect(assigns(:time_record)).to eq(time_record)
       end
 
       it "re-renders the 'edit' template" do
-        time_record = TimeRecord.create! valid_attributes
+        time_record = WorkTimeRecord.create! valid_attributes
         put :update, params: {id: time_record.to_param, time_record: invalid_attributes}, session: valid_session
         expect(response).to render_template("edit")
       end
@@ -143,14 +143,14 @@ RSpec.describe TimeRecordsController, type: :controller do
 
   describe "DELETE #destroy" do
     it "destroys the requested time_record" do
-      time_record = TimeRecord.create! valid_attributes
+      time_record = WorkTimeRecord.create! valid_attributes
       expect {
         delete :destroy, params: {id: time_record.to_param}, session: valid_session
-      }.to change(TimeRecord, :count).by(-1)
+      }.to change(WorkTimeRecord, :count).by(-1)
     end
 
     it "redirects to the time_records list" do
-      time_record = TimeRecord.create! valid_attributes
+      time_record = WorkTimeRecord.create! valid_attributes
       delete :destroy, params: {id: time_record.to_param}, session: valid_session
       expect(response).to redirect_to(time_records_url)
     end
