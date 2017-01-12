@@ -10,10 +10,10 @@
 
   <body>
     <ul class="nav nav-pills nav-justified">
-      <li><a href="work_time_records">勤務時間記録</a></li>
-      <li><a href="work_time_patterns">勤務パターン登録</a></li>
-      <li><a href="transportation_expenses">交通費登録</a></li>
-      <li><a href="transportation_expense_patterns">交通費パターン登録</a></li>
+      <li><%= link_to '勤務時間記録', work_time_records_path, action: :index %></li>
+      <li><%= link_to '勤務パターン登録', work_time_patterns_path, action: :index %></li>
+      <li><%= link_to '交通費登録', transportation_expenses_path, action: :index %></li>
+      <li><%= link_to '交通費パターン登録', transportation_expense_patterns_path, action: :index %></li>
     </ul>
     <%= yield %>
   </body>
