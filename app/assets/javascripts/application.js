@@ -18,3 +18,4 @@
 //= require nprogress
 //= require nprogress-turbolinks
 //= require popper
+//= require bootstrap
